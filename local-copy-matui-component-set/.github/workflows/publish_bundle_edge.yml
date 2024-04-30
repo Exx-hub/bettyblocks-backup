@@ -1,0 +1,24 @@
+name: Publish bundle.js to edge
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy_bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.14.0
+      - name: Install packages
+        run: yarn
+
+      - name: bundle
+        run: yarn bundle
+
+      - name: upload
+        env:
+          AZURE_BLOB_ACCOUNT: ${{ secrets.AZURE_BLOB_ACCOUNT_EDGE }}
+          AZURE_BLOB_ACCOUNT_KEY: ${{ secrets.AZURE_BLOB_ACCOUNT_KEY_EDGE }}
+        run: yarn upload-bundle
