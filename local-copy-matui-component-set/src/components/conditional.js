@@ -14,7 +14,7 @@
       displayLogic,
     } = options; // coming from structures/Conditional/options/index.ts
     const { useText, env, useLogic } = B; // coming from B object
-    const isDev = env === 'dev'; // if development more or production i guess?
+    const isDev = env === 'dev'; // if development (page builder) or compiled page
     const isPristine = isDev && children.length === 0; // if conditional is empty
     const isSingleRule = type === 'singleRule'; // if singleRule nor multiple
 
@@ -39,6 +39,7 @@
     // this will basically return true or false, and will then display or not display children
     const evalCondition = () => {
       // if not visible is toggled, or empty left or right values, return false
+
       if (!initVisibility && leftValue === '' && rightValue === '') {
         return false;
       }
@@ -86,6 +87,7 @@
       setVisible(checkCondition);
     }, [checkCondition]);
 
+    // triggerEvent and use of mounted ref havent figured out yet. will compare with other components.
     useEffect(() => {
       if (visible) {
         B.triggerEvent('isTrue', true);
@@ -104,7 +106,10 @@
       };
     }, []);
 
-    // custom interactions?
+    // THESE ARE CUSTOM INTERACTIONS
+    // these are interactions that can be set on this component.
+    // interaction functions you can select and be able to select this component with.
+    // if these are not defined, when you choose Hide for example, this component will not be included in list
     B.defineFunction('Hide', () => setVisible(false));
     B.defineFunction('Show', () => setVisible(true));
     B.defineFunction('Show/Hide', () => setVisible((s) => !s));
